@@ -34,15 +34,22 @@ class TestPlugin : JavaPlugin(), Listener {
     }
     @EventHandler
     fun onObject(event: BlockBreakEvent) {
-       val entity= event.player.world.spawnEntity(event.block.location,EntityType.ZOMBIE)
+        var timer=5
 
-        entity as Zombie
-        entity.equipment.boots=ItemStack(Material.GOLDEN_BOOTS)
-        entity.equipment.leggings=ItemStack(Material.GOLDEN_LEGGINGS)
-        entity.equipment.chestplate=ItemStack(Material.GOLDEN_CHESTPLATE)
-        entity.equipment.helmet=ItemStack(Material.GOLDEN_HELMET)
-        entity.customName(Component.text("seva", NamedTextColor.DARK_PURPLE))
-        entity.isCustomNameVisible=true
+        server.scheduler.runTaskTimer(this, Runnable {
+            val entity= event.player.world.spawnEntity(event.block.location,EntityType.ZOMBIE)
+            entity as Zombie
+            entity.equipment.boots=ItemStack(Material.GOLDEN_BOOTS)
+            entity.equipment.leggings=ItemStack(Material.GOLDEN_LEGGINGS)
+            entity.equipment.chestplate=ItemStack(Material.GOLDEN_CHESTPLATE)
+            entity.equipment.helmet=ItemStack(Material.GOLDEN_HELMET)
+            entity.customName(Component.text("seva", NamedTextColor.DARK_PURPLE))
+            entity.isCustomNameVisible=true
+            timer--
+            event.player.sendMessage(Component.text(timer))
+        }, 0,20*5)
+
+
     }
 
 }
