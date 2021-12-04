@@ -5,11 +5,15 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.*
 import org.bukkit.entity.EntityType
+import org.bukkit.entity.Player
 import org.bukkit.entity.Sheep
 import org.bukkit.entity.Zombie
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.entity.EntityDamageByBlockEvent
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityRegainHealthEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
@@ -68,5 +72,17 @@ class TestPlugin : JavaPlugin(), Listener {
 
 
     }
+   @EventHandler
+   fun onObject(event: EntityDamageByEntityEvent) {
+       val damage= event.damage
+       val damager= event.damager
+       val entity=event.entity
+       if(entity is Zombie && damager is Player){
+           val health=entity.health
+           val textComponent=Component.text("$damage $health")
+           damager.sendMessage(textComponent)
 
+       }
+
+   }
 }
